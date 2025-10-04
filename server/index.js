@@ -12,7 +12,14 @@ const { sessionMiddleware } = require('./middleware/session');
 require('dotenv').config();
 
 const app = express();
+app.get('/',(req,res)=>{
 
+  res.send({
+    activeStatus:true,
+    error : false,
+    
+  })
+})
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/cyberguard')
   .then(() => console.log('MongoDB connected'))
