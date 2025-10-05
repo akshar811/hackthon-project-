@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from '../utils/api';
 import { useLanguage } from '../context/LanguageContext';
-import { MessageCircle, Send, X, Shield, Bot } from 'lucide-react';
+import { Send, X, Bot } from 'lucide-react'; // ✅ only necessary icons used
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,16 +9,17 @@ const Chatbot = () => {
   const [messages, setMessages] = useState([
     {
       type: 'bot',
-      content: '🛡️ Hi! I\'m your Cybersecurity Assistant. Ask me about online safety, threats, or security best practices!',
-      timestamp: new Date()
-    }
+      content:
+        "🛡️ Hi! I'm your Cybersecurity Assistant. Ask me about online safety, threats, or security best practices!",
+      timestamp: new Date(),
+    },
   ]);
   const [showDefaultQuestions, setShowDefaultQuestions] = useState(true);
 
   const defaultQuestions = [
     {
       id: 1,
-      question: "What is cyber security?",
+      question: 'What is cyber security?',
       answer: `🛡️ **Cyber Security Explained**
 
 Cyber security is the practice of protecting systems, networks, and programs from digital attacks. It involves:
@@ -46,11 +47,11 @@ Cyber security is the practice of protecting systems, networks, and programs fro
 • Maintains business continuity
 • Ensures privacy and trust
 
-Stay safe by using strong passwords, enabling 2FA, and keeping software updated! 🔐`
+Stay safe by using strong passwords, enabling 2FA, and keeping software updated! 🔐`,
     },
     {
       id: 2,
-      question: "How to complain about cyber fraud?",
+      question: 'How to complain about cyber fraud?',
       answer: `🚨 **How to Report Cyber Fraud in India**
 
 📞 **Immediate Steps:**
@@ -86,11 +87,11 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
 🔗 **Useful Contacts:**
 • Cyber Crime: 1930
 • Banking Fraud: Contact your bank immediately
-• Consumer Helpline: 1915`
+• Consumer Helpline: 1915`,
     },
     {
       id: 3,
-      question: "How to secure yourself on the internet?",
+      question: 'How to secure yourself on the internet?',
       answer: `🔐 **Internet Security Best Practices**
 
 🔑 **Password Security:**
@@ -113,7 +114,7 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
 
 📱 **Device Security:**
 • Keep **software updated** (OS, apps, antivirus)
-• Use **screen locks** and device encryption
+• Use **screen locks** and device encryption**
 • Install apps from **official stores only**
 • Regular **security scans**
 
@@ -135,57 +136,51 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
 • Unsolicited calls asking for personal info
 • Fake tech support calls
 
-💡 **Remember:** Stay vigilant, think before you click, and when in doubt, verify independently! 🛡️`
-    }
+💡 **Remember:** Stay vigilant, think before you click, and when in doubt, verify independently! 🛡️`,
+    },
   ];
 
   const handleDefaultQuestion = (questionData) => {
     const userMessage = {
       type: 'user',
       content: questionData.question,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-    
     const botMessage = {
       type: 'bot',
       content: questionData.answer,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-    
-    setMessages(prev => [...prev, userMessage, botMessage]);
+    setMessages((prev) => [...prev, userMessage, botMessage]);
     setShowDefaultQuestions(false);
   };
+
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
-
     const userMessage = {
       type: 'user',
       content: inputMessage,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-
     const currentMessage = inputMessage;
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
     setShowDefaultQuestions(false);
 
     try {
       const response = await api.post('/chatbot/chat', {
-        message: currentMessage
+        message: currentMessage,
       });
 
       let botContent = response.data.response;
-      
-      // Handle different response types
+
       if (response.data.success && response.data.source === 'gemini') {
-        // Successful Gemini API response - use as-is
         console.log('✅ Using Gemini API response');
       } else if (response.data.fallback) {
-        // Fallback response with reason
         if (response.data.reason === 'rate_limit') {
           botContent = '🕰️ Please wait a moment between messages.\n\n' + botContent;
         } else if (response.data.reason === 'quota_exceeded') {
@@ -197,17 +192,20 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
       const botMessage = {
         type: 'bot',
         content: botContent,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
-      const errorMessage = {
-        type: 'bot',
-        content: '⚠️ Sorry, I encountered an error. Please try asking your cybersecurity question again in a moment.',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: 'bot',
+          content:
+            '⚠️ Sorry, I encountered an error. Please try asking your cybersecurity question again in a moment.',
+          timestamp: new Date(),
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -222,7 +220,6 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      {/* Chat Button */}
       {!isOpen && (
         <div className="relative">
           <button
@@ -239,7 +236,6 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
         </div>
       )}
 
-      {/* Chat Window */}
       {isOpen && (
         <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-purple-200 dark:border-purple-800 w-96 h-[32rem] flex flex-col transform transition-all duration-500 ease-out animate-in slide-in-from-bottom-8 fade-in backdrop-blur-sm">
           {/* Header */}
@@ -255,8 +251,12 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
                 </div>
               </div>
               <div>
-                <span className="font-semibold text-lg bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">{t('chatbotTitle')}</span>
-                <div className="text-xs text-purple-100 font-medium">🛡️ {t('securityAssistant')}</div>
+                <span className="font-semibold text-lg bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                  {t('chatbotTitle')}
+                </span>
+                <div className="text-xs text-purple-100 font-medium">
+                  🛡️ {t('securityAssistant')}
+                </div>
               </div>
             </div>
             <button
@@ -270,8 +270,7 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-b from-purple-50/50 via-blue-50/30 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(147,51,234,0.1),transparent_50%)] pointer-events-none"></div>
-            
-            {/* Default Questions */}
+
             {showDefaultQuestions && messages.length === 1 && (
               <div className="space-y-3 animate-in slide-in-from-bottom-3 fade-in">
                 <div className="text-center text-sm text-purple-600 dark:text-purple-400 font-medium mb-4">
@@ -295,12 +294,9 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
                 ))}
               </div>
             )}
-            
+
             {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
+              <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div
                   className={`max-w-sm p-4 rounded-2xl transform transition-all duration-500 ease-out animate-in slide-in-from-bottom-3 fade-in relative ${
                     message.type === 'user'
@@ -308,36 +304,26 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
                       : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-xl border border-purple-100 dark:border-purple-800 rounded-bl-md backdrop-blur-sm'
                   }`}
                 >
-                  {message.type === 'bot' && (
-                    <div className="absolute -left-2 top-4 w-4 h-4 bg-white dark:bg-gray-800 border-l border-b border-purple-100 dark:border-purple-800 transform rotate-45"></div>
-                  )}
-                  {message.type === 'user' && (
-                    <div className="absolute -right-2 top-4 w-4 h-4 bg-gradient-to-br from-purple-600 to-blue-600 transform rotate-45"></div>
-                  )}
                   <div className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</div>
                 </div>
               </div>
             ))}
+
             {isLoading && (
               <div className="flex justify-start animate-in slide-in-from-bottom-3 fade-in">
                 <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-xl border border-purple-100 dark:border-purple-800 rounded-bl-md backdrop-blur-sm relative">
-                  <div className="absolute -left-2 top-4 w-4 h-4 bg-white dark:bg-gray-800 border-l border-b border-purple-100 dark:border-purple-800 transform rotate-45"></div>
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
                       <Bot className="h-5 w-5 text-white animate-pulse" />
                     </div>
-                    <div className="flex space-x-1">
-                      <div className="w-3 h-3 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full animate-bounce"></div>
-                      <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-3 h-3 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    </div>
-                    <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">{t('aiThinking')}</span>
+                    <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">
+                      {t('aiThinking')}
+                    </span>
                   </div>
                 </div>
               </div>
             )}
-            
-            {/* Show default questions again button */}
+
             {!showDefaultQuestions && messages.length > 1 && (
               <div className="text-center mt-4">
                 <button
@@ -363,7 +349,6 @@ Stay safe by using strong passwords, enabling 2FA, and keeping software updated!
                   className="w-full px-6 py-4 border-2 border-purple-200 dark:border-purple-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-800 dark:text-white text-sm transition-all duration-300 shadow-lg backdrop-blur-sm bg-white/80 placeholder-purple-400"
                   disabled={isLoading}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 rounded-2xl pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               <button
                 onClick={sendMessage}

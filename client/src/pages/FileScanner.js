@@ -13,7 +13,6 @@ import {
   Shield, 
   FileText,
   Scan,
-  Download,
   Bot,
   Sparkles
 } from 'lucide-react';

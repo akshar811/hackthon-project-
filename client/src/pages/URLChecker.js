@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
-import { Link as LinkIcon, Search, AlertTriangle, CheckCircle, Shield, Globe, Download, Bot, Sparkles } from 'lucide-react';
+import { Link as LinkIcon, Search, AlertTriangle, CheckCircle, Shield, Globe, Bot, Sparkles } from 'lucide-react';
 
 import useReportGenerator from '../hooks/useReportGenerator';
 import AIReportViewer from '../components/AIReportViewer';
@@ -10,7 +10,7 @@ const URLChecker = () => {
   const [url, setUrl] = useState('');
   const [result, setResult] = useState(null);
   const [scanning, setScanning] = useState(false);
-  const [scanStartTime, setScanStartTime] = useState(null);
+
   const [showAIReport, setShowAIReport] = useState(false);
   
   const { isGenerating, report, generateReport, clearReport } = useReportGenerator();
@@ -32,7 +32,6 @@ const URLChecker = () => {
 
     setScanning(true);
     const startTime = new Date();
-    setScanStartTime(startTime);
     
     try {
       const response = await api.post('/scan/url', { url: url.trim() });

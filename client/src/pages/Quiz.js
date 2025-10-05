@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../utils/api';
 import { useLanguage } from '../context/LanguageContext';
 import toast from 'react-hot-toast';
@@ -21,16 +21,7 @@ const Quiz = () => {
   const [loading, setLoading] = useState(true);
   const [isLoadingQuiz, setIsLoadingQuiz] = useState(false);
 
-  // Always load fresh quiz when component mounts
-  useEffect(() => {
-    console.log('Quiz component mounted - loading fresh quiz');
-    loadQuiz();
-  }, []);
-
-  // Only load quiz on mount, not on visibility changes
-  // This prevents multiple requests
-
-  const loadQuiz = async () => {
+  const loadQuiz = useCallback(async () => {
     // Prevent multiple simultaneous requests
     if (isLoadingQuiz) {
       console.log('Quiz already loading, skipping request');
@@ -107,7 +98,13 @@ const Quiz = () => {
       setLoading(false);
       setIsLoadingQuiz(false);
     }
-  };
+  }, [currentLanguage, isLoadingQuiz]);
+
+  // Always load fresh quiz when component mounts
+  useEffect(() => {
+    console.log('Quiz component mounted - loading fresh quiz');
+    loadQuiz();
+  }, [loadQuiz]);
 
   const handleAnswerSelect = (option) => {
     setSelectedAnswer(option);

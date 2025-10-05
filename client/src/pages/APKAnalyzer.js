@@ -5,7 +5,6 @@ import useReportGenerator from '../hooks/useReportGenerator';
 import AIReportViewer from '../components/AIReportViewer';
 import { 
   Smartphone, 
-  Upload, 
   AlertTriangle, 
   CheckCircle, 
   Shield, 
