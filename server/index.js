@@ -27,7 +27,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/cyberguar
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000',"https://cysafe.netlify.app/dashboard"],
   credentials: true
 }));
 app.use(express.json());
