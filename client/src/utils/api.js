@@ -3,7 +3,7 @@ import { getSessionId, setSessionId } from './session';
 
 // Create axios instance with session handling
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? '/api' : 'https://hackthon-project-sigma.vercel.app/'
+  baseURL: process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000/api'
 });
 
 // Add session ID and JWT token to all requests
